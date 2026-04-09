@@ -22,6 +22,44 @@ import {
 import { dashboardApi, formatCurrency, formatDate, formatDateTime, operationsApi } from '../../lib/dashboard';
 import { useApiData } from '../../lib/use-api';
 
+const orderFilterOptions = [
+  {
+    value: '',
+    label: 'All',
+    activeClassName: 'bg-gradient-to-r from-violet-500 to-blue-500 text-white shadow-lg shadow-violet-500/20',
+  },
+  {
+    value: 'PENDING',
+    label: 'Pending',
+    activeClassName: 'bg-yellow-500/90 text-slate-950 hover:bg-yellow-400',
+  },
+  {
+    value: 'INVENTORY_RESERVED',
+    label: 'Inventory Reserved',
+    activeClassName: 'bg-orange-500/90 text-white hover:bg-orange-400',
+  },
+  {
+    value: 'PAYMENT_PROCESSED',
+    label: 'Payment Processed',
+    activeClassName: 'bg-sky-500/90 text-white hover:bg-sky-400',
+  },
+  {
+    value: 'CONFIRMED',
+    label: 'Confirmed',
+    activeClassName: 'bg-violet-500/90 text-white hover:bg-violet-400',
+  },
+  {
+    value: 'SHIPPED',
+    label: 'Shipped',
+    activeClassName: 'bg-emerald-500/90 text-white hover:bg-emerald-400',
+  },
+  {
+    value: 'CANCELLED',
+    label: 'Cancelled',
+    activeClassName: 'bg-rose-500/90 text-white hover:bg-rose-400',
+  },
+] as const;
+
 export function Orders() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -89,15 +127,19 @@ export function Orders() {
             />
           </div>
           <div className="flex flex-wrap gap-2">
-            {['', 'PENDING', 'INVENTORY_RESERVED', 'PAYMENT_PROCESSED', 'CONFIRMED', 'SHIPPED', 'CANCELLED'].map((status) => (
+            {orderFilterOptions.map((option) => (
               <Button
-                key={status || 'all'}
-                variant={statusFilter === status ? 'default' : 'outline'}
+                key={option.value || 'all'}
+                variant="outline"
                 size="sm"
-                className={statusFilter === status ? 'bg-gradient-to-r from-purple-500 to-blue-500' : 'border-white/10 bg-white/5'}
-                onClick={() => setStatusFilter(status)}
+                className={
+                  statusFilter === option.value
+                    ? `${option.activeClassName} border-transparent`
+                    : 'border-slate-700 bg-slate-800/70 text-slate-200 hover:border-slate-500 hover:bg-slate-700/80 hover:text-white'
+                }
+                onClick={() => setStatusFilter(option.value)}
               >
-                {status || 'All'}
+                {option.label}
               </Button>
             ))}
           </div>
