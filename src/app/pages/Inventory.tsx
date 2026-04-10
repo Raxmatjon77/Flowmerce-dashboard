@@ -21,6 +21,7 @@ import {
   TableRow,
 } from '../components/ui/table';
 import { dashboardApi, operationsApi } from '../../lib/dashboard';
+import { InventoryAction, StockState } from '../../lib/constants';
 import { useApiData } from '../../lib/use-api';
 
 export function Inventory() {
@@ -31,7 +32,7 @@ export function Inventory() {
     productName: string;
     availableQuantity: number;
   } | null>(null);
-  const [actionType, setActionType] = useState<'reserve' | 'release' | null>(null);
+  const [actionType, setActionType] = useState<InventoryAction | null>(null);
   const [orderId, setOrderId] = useState('');
   const [quantity, setQuantity] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -59,7 +60,7 @@ export function Inventory() {
         items: [{ sku: selectedItem.sku, quantity: parsedQuantity }],
       };
 
-      const response = actionType === 'reserve'
+      const response = actionType === InventoryAction.RESERVE
         ? await operationsApi.reserveInventory(payload)
         : await operationsApi.releaseInventory(payload);
 
@@ -77,7 +78,7 @@ export function Inventory() {
   }
 
   const items = inventory.data?.data || [];
-  const lowStockItems = items.filter((item) => item.stockState !== 'healthy');
+  const lowStockItems = items.filter((item) => item.stockState !== StockState.HEALTHY);
 
   return (
     <div className="space-y-6">
@@ -159,7 +160,7 @@ export function Inventory() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className={item.stockState === 'critical' ? 'text-red-400' : item.stockState === 'low' ? 'text-orange-400' : 'text-green-400'}>
+                    <span className={item.stockState === StockState.CRITICAL ? 'text-red-400' : item.stockState === StockState.LOW ? 'text-orange-400' : 'text-green-400'}>
                       {item.stockState}
                     </span>
                   </TableCell>
@@ -171,7 +172,7 @@ export function Inventory() {
                         className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10"
                         onClick={() => {
                           setSelectedItem(item);
-                          setActionType('reserve');
+                          setActionType(InventoryAction.RESERVE);
                         }}
                       >
                         <Plus className="mr-1 h-3 w-3" />
@@ -183,7 +184,7 @@ export function Inventory() {
                         className="border-blue-500/30 text-blue-300 hover:bg-blue-500/10"
                         onClick={() => {
                           setSelectedItem(item);
-                          setActionType('release');
+                          setActionType(InventoryAction.RELEASE);
                         }}
                       >
                         <Minus className="mr-1 h-3 w-3" />
@@ -230,7 +231,7 @@ export function Inventory() {
         <DialogContent className="border-white/10 bg-slate-950">
           <DialogHeader>
             <DialogTitle className="text-white">
-              {actionType === 'reserve' ? 'Reserve Inventory' : 'Release Inventory'}
+              {actionType === InventoryAction.RESERVE ? 'Reserve Inventory' : 'Release Inventory'}
             </DialogTitle>
           </DialogHeader>
           {selectedItem ? (
@@ -250,7 +251,7 @@ export function Inventory() {
               </div>
               {errorMessage ? <p className="text-sm text-red-400">{errorMessage}</p> : null}
               <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-500" disabled={submitting} onClick={() => void submitInventoryAction()}>
-                {actionType === 'reserve' ? 'Reserve for Order' : 'Release Reservation'}
+                {actionType === InventoryAction.RESERVE ? 'Reserve for Order' : 'Release Reservation'}
               </Button>
             </div>
           ) : null}

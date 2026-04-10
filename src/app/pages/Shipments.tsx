@@ -28,6 +28,7 @@ import {
   TableRow,
 } from '../components/ui/table';
 import { dashboardApi, formatDate, operationsApi } from '../../lib/dashboard';
+import { ShipmentStatus } from '../../lib/constants';
 import { useApiData } from '../../lib/use-api';
 
 export function Shipments() {
@@ -42,7 +43,7 @@ export function Shipments() {
     zipCode: '',
     country: '',
   });
-  const [nextStatus, setNextStatus] = useState('PICKED_UP');
+  const [nextStatus, setNextStatus] = useState(ShipmentStatus.PICKED_UP);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -124,15 +125,15 @@ export function Shipments() {
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="border-white/10 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 p-6">
           <p className="text-sm text-gray-400">Pending</p>
-          <p className="mt-2 text-3xl font-bold text-white">{data.filter((shipment) => shipment.status === 'PENDING').length}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{data.filter((shipment) => shipment.status === ShipmentStatus.PENDING).length}</p>
         </Card>
         <Card className="border-white/10 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-6">
           <p className="text-sm text-gray-400">In Transit</p>
-          <p className="mt-2 text-3xl font-bold text-white">{data.filter((shipment) => shipment.status === 'IN_TRANSIT').length}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{data.filter((shipment) => shipment.status === ShipmentStatus.IN_TRANSIT).length}</p>
         </Card>
         <Card className="border-white/10 bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6">
           <p className="text-sm text-gray-400">Delivered</p>
-          <p className="mt-2 text-3xl font-bold text-white">{data.filter((shipment) => shipment.status === 'DELIVERED').length}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{data.filter((shipment) => shipment.status === ShipmentStatus.DELIVERED).length}</p>
         </Card>
       </div>
 
@@ -185,7 +186,7 @@ export function Shipments() {
                       className="border-blue-500/30 text-blue-300 hover:bg-blue-500/10"
                       onClick={() => {
                         setSelectedShipmentId(shipment.id);
-                        setNextStatus('PICKED_UP');
+                        setNextStatus(ShipmentStatus.PICKED_UP);
                       }}
                     >
                       Update Status
@@ -217,10 +218,10 @@ export function Shipments() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="border-white/10 bg-slate-900">
-                    <SelectItem value="PICKED_UP">Picked Up</SelectItem>
-                    <SelectItem value="IN_TRANSIT">In Transit</SelectItem>
-                    <SelectItem value="DELIVERED">Delivered</SelectItem>
-                    <SelectItem value="RETURNED">Returned</SelectItem>
+                    <SelectItem value={ShipmentStatus.PICKED_UP}>Picked Up</SelectItem>
+                    <SelectItem value={ShipmentStatus.IN_TRANSIT}>In Transit</SelectItem>
+                    <SelectItem value={ShipmentStatus.DELIVERED}>Delivered</SelectItem>
+                    <SelectItem value={ShipmentStatus.RETURNED}>Returned</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

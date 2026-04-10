@@ -1,4 +1,5 @@
 import { apiGet, apiPatch, apiPost } from './api';
+import { ServiceHealthStatus, StockState } from './constants';
 
 export interface DashboardStatusCount {
   status: string;
@@ -42,14 +43,14 @@ export interface DashboardActivity {
 
 export interface DashboardHealthService {
   name: string;
-  status: 'healthy' | 'degraded' | 'down';
+  status: ServiceHealthStatus;
   responseTimeMs: number | null;
   details: string;
   checkedAt: string;
 }
 
 export interface DashboardHealth {
-  overallStatus: 'healthy' | 'degraded' | 'down';
+  overallStatus: ServiceHealthStatus;
   services: DashboardHealthService[];
   generatedAt: string;
 }
@@ -150,7 +151,7 @@ export interface DashboardInventoryListItem {
   reservedQuantity: number;
   availableQuantity: number;
   lowStockThreshold: number;
-  stockState: 'healthy' | 'low' | 'critical';
+  stockState: StockState;
 }
 
 export interface DashboardPaymentListItem {

@@ -3,6 +3,7 @@ import { Card } from '../components/ui/card';
 import { StatusBadge } from '../components/StatusBadge';
 import { ErrorState, LoadingState } from '../components/AsyncState';
 import { dashboardApi, formatDateTime } from '../../lib/dashboard';
+import { ServiceHealthStatus } from '../../lib/constants';
 import { useApiData } from '../../lib/use-api';
 
 export function Health() {
@@ -17,8 +18,8 @@ export function Health() {
   }
 
   const getStatusIcon = (status: string) => {
-    if (status === 'healthy') return <CheckCircle2 className="h-6 w-6 text-green-400" />;
-    if (status === 'degraded') return <AlertCircle className="h-6 w-6 text-orange-400" />;
+    if (status === ServiceHealthStatus.HEALTHY) return <CheckCircle2 className="h-6 w-6 text-green-400" />;
+    if (status === ServiceHealthStatus.DEGRADED) return <AlertCircle className="h-6 w-6 text-orange-400" />;
     return <XCircle className="h-6 w-6 text-red-400" />;
   };
 
@@ -43,7 +44,7 @@ export function Health() {
             </div>
             <div>
               <h2 className="text-3xl font-bold text-white">
-                {data.overallStatus === 'healthy' ? 'All Systems Operational' : data.overallStatus === 'degraded' ? 'Partial Degradation' : 'Service Disruption'}
+                {data.overallStatus === ServiceHealthStatus.HEALTHY ? 'All Systems Operational' : data.overallStatus === ServiceHealthStatus.DEGRADED ? 'Partial Degradation' : 'Service Disruption'}
               </h2>
               <p className="mt-1 text-gray-400">Checked {formatDateTime(data.generatedAt)}</p>
             </div>
@@ -52,13 +53,13 @@ export function Health() {
             <div className="text-center">
               <p className="text-sm text-gray-400">Healthy</p>
               <p className="mt-1 text-2xl font-bold text-green-400">
-                {data.services.filter((service) => service.status === 'healthy').length}
+                {data.services.filter((service) => service.status === ServiceHealthStatus.HEALTHY).length}
               </p>
             </div>
             <div className="text-center">
               <p className="text-sm text-gray-400">Issues</p>
               <p className="mt-1 text-2xl font-bold text-orange-400">
-                {data.services.filter((service) => service.status !== 'healthy').length}
+                {data.services.filter((service) => service.status !== ServiceHealthStatus.HEALTHY).length}
               </p>
             </div>
           </div>

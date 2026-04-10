@@ -20,6 +20,7 @@ import {
   TableRow,
 } from '../components/ui/table';
 import { dashboardApi, formatCurrency, formatDateTime, operationsApi } from '../../lib/dashboard';
+import { PaymentStatus } from '../../lib/constants';
 import { useApiData } from '../../lib/use-api';
 
 export function Payments() {
@@ -65,19 +66,19 @@ export function Payments() {
         <Card className="border-white/10 bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6">
           <p className="text-sm text-gray-400">Completed Value</p>
           <p className="mt-2 text-3xl font-bold text-white">
-            {formatCurrency(data.filter((payment) => payment.status === 'COMPLETED').reduce((sum, payment) => sum + payment.amount, 0))}
+            {formatCurrency(data.filter((payment) => payment.status === PaymentStatus.COMPLETED).reduce((sum, payment) => sum + payment.amount, 0))}
           </p>
         </Card>
         <Card className="border-white/10 bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-6">
           <p className="text-sm text-gray-400">Refunded Value</p>
           <p className="mt-2 text-3xl font-bold text-white">
-            {formatCurrency(data.filter((payment) => payment.status === 'REFUNDED').reduce((sum, payment) => sum + payment.amount, 0))}
+            {formatCurrency(data.filter((payment) => payment.status === PaymentStatus.REFUNDED).reduce((sum, payment) => sum + payment.amount, 0))}
           </p>
         </Card>
         <Card className="border-white/10 bg-gradient-to-br from-red-500/10 to-orange-500/10 p-6">
           <p className="text-sm text-gray-400">Failed Payments</p>
           <p className="mt-2 text-3xl font-bold text-white">
-            {data.filter((payment) => payment.status === 'FAILED').length}
+            {data.filter((payment) => payment.status === PaymentStatus.FAILED).length}
           </p>
         </Card>
       </div>
@@ -129,7 +130,7 @@ export function Payments() {
                       variant="outline"
                       size="sm"
                       className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10"
-                      disabled={payment.status !== 'COMPLETED'}
+                      disabled={payment.status !== PaymentStatus.COMPLETED}
                       onClick={() => setSelectedPaymentId(payment.id)}
                     >
                       <RefreshCw className="mr-1 h-3 w-3" />

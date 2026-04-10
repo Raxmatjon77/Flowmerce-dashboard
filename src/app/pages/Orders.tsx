@@ -20,6 +20,7 @@ import {
   TableRow,
 } from '../components/ui/table';
 import { dashboardApi, formatCurrency, formatDate, formatDateTime, operationsApi } from '../../lib/dashboard';
+import { OrderAction, OrderStatus } from '../../lib/constants';
 import { useApiData } from '../../lib/use-api';
 
 const orderFilterOptions = [
@@ -29,32 +30,32 @@ const orderFilterOptions = [
     activeClassName: 'bg-gradient-to-r from-violet-500 to-blue-500 text-white shadow-lg shadow-violet-500/20',
   },
   {
-    value: 'PENDING',
+    value: OrderStatus.PENDING,
     label: 'Pending',
     activeClassName: 'bg-yellow-500/90 text-slate-950 hover:bg-yellow-400',
   },
   {
-    value: 'INVENTORY_RESERVED',
+    value: OrderStatus.INVENTORY_RESERVED,
     label: 'Inventory Reserved',
     activeClassName: 'bg-orange-500/90 text-white hover:bg-orange-400',
   },
   {
-    value: 'PAYMENT_PROCESSED',
+    value: OrderStatus.PAYMENT_PROCESSED,
     label: 'Payment Processed',
     activeClassName: 'bg-sky-500/90 text-white hover:bg-sky-400',
   },
   {
-    value: 'CONFIRMED',
+    value: OrderStatus.CONFIRMED,
     label: 'Confirmed',
     activeClassName: 'bg-violet-500/90 text-white hover:bg-violet-400',
   },
   {
-    value: 'SHIPPED',
+    value: OrderStatus.SHIPPED,
     label: 'Shipped',
     activeClassName: 'bg-emerald-500/90 text-white hover:bg-emerald-400',
   },
   {
-    value: 'CANCELLED',
+    value: OrderStatus.CANCELLED,
     label: 'Cancelled',
     activeClassName: 'bg-rose-500/90 text-white hover:bg-rose-400',
   },
@@ -84,7 +85,7 @@ export function Orders() {
     }
   }, [selectedOrderId]);
 
-  async function handleOrderAction(type: 'confirm' | 'cancel') {
+  async function handleOrderAction(type: OrderAction) {
     if (!selectedOrderId) {
       return;
     }
@@ -95,7 +96,7 @@ export function Orders() {
 
     try {
       const response =
-        type === 'confirm'
+        type === OrderAction.CONFIRM
           ? await operationsApi.confirmOrder(selectedOrderId)
           : await operationsApi.cancelOrder(selectedOrderId);
       setActionMessage(response.message);
@@ -288,7 +289,7 @@ export function Orders() {
                 <Button
                   className="bg-gradient-to-r from-purple-500 to-blue-500"
                   disabled={actionLoading}
-                  onClick={() => void handleOrderAction('confirm')}
+                  onClick={() => void handleOrderAction(OrderAction.CONFIRM)}
                 >
                   Confirm Order
                 </Button>
@@ -296,7 +297,7 @@ export function Orders() {
                   variant="outline"
                   className="border-red-500/30 text-red-300 hover:bg-red-500/10"
                   disabled={actionLoading}
-                  onClick={() => void handleOrderAction('cancel')}
+                  onClick={() => void handleOrderAction(OrderAction.CANCEL)}
                 >
                   Cancel Order
                 </Button>

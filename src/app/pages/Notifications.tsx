@@ -29,6 +29,7 @@ import {
   TableRow,
 } from '../components/ui/table';
 import { dashboardApi, formatDateTime, operationsApi } from '../../lib/dashboard';
+import { NotificationChannel, NotificationStatus } from '../../lib/constants';
 import { useApiData } from '../../lib/use-api';
 
 export function Notifications() {
@@ -36,7 +37,7 @@ export function Notifications() {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [form, setForm] = useState({
     recipientId: '',
-    channel: 'EMAIL',
+    channel: NotificationChannel.EMAIL,
     type: 'ORDER_UPDATE',
     subject: '',
     body: '',
@@ -53,9 +54,9 @@ export function Notifications() {
   const data = notifications.data?.data || [];
 
   const getChannelIcon = (channel: string) => {
-    const normalized = channel.toLowerCase();
-    if (normalized === 'email') return <Mail className="h-4 w-4 text-blue-400" />;
-    if (normalized === 'sms') return <MessageSquare className="h-4 w-4 text-green-400" />;
+    const normalized = channel.toUpperCase();
+    if (normalized === NotificationChannel.EMAIL) return <Mail className="h-4 w-4 text-blue-400" />;
+    if (normalized === NotificationChannel.SMS) return <MessageSquare className="h-4 w-4 text-green-400" />;
     return <Smartphone className="h-4 w-4 text-purple-400" />;
   };
 
@@ -70,7 +71,7 @@ export function Notifications() {
       setShowSendDialog(false);
       setForm({
         recipientId: '',
-        channel: 'EMAIL',
+        channel: NotificationChannel.EMAIL,
         type: 'ORDER_UPDATE',
         subject: '',
         body: '',
@@ -98,15 +99,15 @@ export function Notifications() {
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="border-white/10 bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6">
           <p className="text-sm text-gray-400">Sent</p>
-          <p className="mt-2 text-3xl font-bold text-white">{data.filter((item) => item.status === 'SENT').length}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{data.filter((item) => item.status === NotificationStatus.SENT).length}</p>
         </Card>
         <Card className="border-white/10 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 p-6">
           <p className="text-sm text-gray-400">Pending</p>
-          <p className="mt-2 text-3xl font-bold text-white">{data.filter((item) => item.status === 'PENDING').length}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{data.filter((item) => item.status === NotificationStatus.PENDING).length}</p>
         </Card>
         <Card className="border-white/10 bg-gradient-to-br from-red-500/10 to-pink-500/10 p-6">
           <p className="text-sm text-gray-400">Failed</p>
-          <p className="mt-2 text-3xl font-bold text-white">{data.filter((item) => item.status === 'FAILED').length}</p>
+          <p className="mt-2 text-3xl font-bold text-white">{data.filter((item) => item.status === NotificationStatus.FAILED).length}</p>
         </Card>
       </div>
 
@@ -183,9 +184,9 @@ export function Notifications() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="border-white/10 bg-slate-900">
-                    <SelectItem value="EMAIL">Email</SelectItem>
-                    <SelectItem value="SMS">SMS</SelectItem>
-                    <SelectItem value="PUSH">Push</SelectItem>
+                    <SelectItem value={NotificationChannel.EMAIL}>Email</SelectItem>
+                    <SelectItem value={NotificationChannel.SMS}>SMS</SelectItem>
+                    <SelectItem value={NotificationChannel.PUSH}>Push</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
