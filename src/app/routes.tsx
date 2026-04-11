@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { DashboardLayout } from './components/DashboardLayout';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { Login } from './pages/Login';
 import { Overview } from './pages/Overview';
 import { Users } from './pages/Users';
 import { Orders } from './pages/Orders';
@@ -10,38 +12,50 @@ import { Notifications } from './pages/Notifications';
 import { Health } from './pages/Health';
 import { NotFound } from './pages/NotFound';
 
+function Protected({ children }: { children: React.ReactNode }) {
+  return (
+    <ProtectedRoute>
+      <DashboardLayout>{children}</DashboardLayout>
+    </ProtectedRoute>
+  );
+}
+
 export const router = createBrowserRouter([
   {
+    path: '/login',
+    element: <Login />,
+  },
+  {
     path: '/',
-    element: <DashboardLayout><Overview /></DashboardLayout>,
+    element: <Protected><Overview /></Protected>,
   },
   {
     path: '/users',
-    element: <DashboardLayout><Users /></DashboardLayout>,
+    element: <Protected><Users /></Protected>,
   },
   {
     path: '/orders',
-    element: <DashboardLayout><Orders /></DashboardLayout>,
+    element: <Protected><Orders /></Protected>,
   },
   {
     path: '/inventory',
-    element: <DashboardLayout><Inventory /></DashboardLayout>,
+    element: <Protected><Inventory /></Protected>,
   },
   {
     path: '/payments',
-    element: <DashboardLayout><Payments /></DashboardLayout>,
+    element: <Protected><Payments /></Protected>,
   },
   {
     path: '/shipments',
-    element: <DashboardLayout><Shipments /></DashboardLayout>,
+    element: <Protected><Shipments /></Protected>,
   },
   {
     path: '/notifications',
-    element: <DashboardLayout><Notifications /></DashboardLayout>,
+    element: <Protected><Notifications /></Protected>,
   },
   {
     path: '/health',
-    element: <DashboardLayout><Health /></DashboardLayout>,
+    element: <Protected><Health /></Protected>,
   },
   {
     path: '*',

@@ -217,7 +217,7 @@ export function Shipments() {
                   <SelectTrigger className="border-white/10 bg-white/5">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="border-white/10 bg-slate-900">
+                  <SelectContent className="border-white/10 bg-slate-900 text-gray-200">
                     <SelectItem value={ShipmentStatus.PICKED_UP}>Picked Up</SelectItem>
                     <SelectItem value={ShipmentStatus.IN_TRANSIT}>In Transit</SelectItem>
                     <SelectItem value={ShipmentStatus.DELIVERED}>Delivered</SelectItem>

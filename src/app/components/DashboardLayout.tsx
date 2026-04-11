@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router';
+import { logout } from '../../lib/auth';
 import { 
   LayoutDashboard, 
   Users, 
@@ -199,7 +200,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer text-red-400">
+                  <DropdownMenuItem className="cursor-pointer text-red-400" onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
                   </DropdownMenuItem>
