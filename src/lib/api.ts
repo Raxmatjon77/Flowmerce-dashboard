@@ -1,4 +1,4 @@
-import { getStoredToken, TOKEN_KEY } from './auth';
+import { getStoredToken, logout } from './auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
@@ -23,9 +23,8 @@ export async function apiRequest<T>(
   params?: Record<string, string | number | boolean | undefined>,
 ): Promise<T> {
   const token = getStoredToken();
-
   if (!token) {
-    window.location.replace('/login');
+    logout();
     throw new Error('Not authenticated');
   }
 
@@ -40,9 +39,8 @@ export async function apiRequest<T>(
 
   if (!response.ok) {
     if (response.status === 401) {
-      localStorage.removeItem(TOKEN_KEY);
-      window.location.replace('/login');
-      throw new Error('Session expired. Please sign in again.');
+      logout();
+      throw new Error('Session expired. Please log in again.');
     }
 
     const text = await response.text();

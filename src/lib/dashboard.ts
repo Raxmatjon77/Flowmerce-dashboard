@@ -1,82 +1,24 @@
 import { apiGet, apiPatch, apiPost } from './api';
-import { ServiceHealthStatus, StockState } from './constants';
+import type { components } from '../types/api.generated';
 
-export interface DashboardStatusCount {
-  status: string;
-  count: number;
-}
-
-export interface DashboardTrendPoint {
-  date: string;
-  orders: number;
-  revenue: number;
-}
-
-export interface DashboardInventoryAlert {
-  id: string;
-  sku: string;
-  productName: string;
-  availableQuantity: number;
-  totalQuantity: number;
-  reservedQuantity: number;
-  lowStockThreshold: number;
-}
-
-export interface DashboardRecentOrder {
-  id: string;
-  customerId: string;
-  status: string;
-  totalAmount: number;
-  currency: string;
-  itemCount: number;
-  createdAt: string;
-}
-
-export interface DashboardActivity {
-  type: string;
-  entityId: string;
-  title: string;
-  description: string;
-  status: string;
-  timestamp: string;
-}
-
-export interface DashboardHealthService {
-  name: string;
-  status: ServiceHealthStatus;
-  responseTimeMs: number | null;
-  details: string;
-  checkedAt: string;
-}
-
-export interface DashboardHealth {
-  overallStatus: ServiceHealthStatus;
-  services: DashboardHealthService[];
-  generatedAt: string;
-}
-
-export interface DashboardOverview {
-  summary: {
-    totalOrders: number;
-    ordersToday: number;
-    activeOrders: number;
-    totalRevenue: number;
-    totalInventoryUnits: number;
-    lowStockItems: number;
-    pendingNotifications: number;
-    unhealthyServices: number;
-  };
-  orderStatusDistribution: DashboardStatusCount[];
-  paymentStatusDistribution: DashboardStatusCount[];
-  shipmentStatusDistribution: DashboardStatusCount[];
-  notificationStatusDistribution: DashboardStatusCount[];
-  orderTrend: DashboardTrendPoint[];
-  lowStockItems: DashboardInventoryAlert[];
-  recentOrders: DashboardRecentOrder[];
-  recentActivity: DashboardActivity[];
-  health: DashboardHealth;
-  generatedAt: string;
-}
+// --- Generated types from backend OpenAPI spec ---
+export type DashboardOverview = components['schemas']['DashboardOverviewResponseDto'];
+export type DashboardStatusCount = components['schemas']['DashboardStatusCountDto'];
+export type DashboardTrendPoint = components['schemas']['DashboardTrendPointDto'];
+export type DashboardInventoryAlert = components['schemas']['DashboardInventoryAlertDto'];
+export type DashboardRecentOrder = components['schemas']['DashboardRecentOrderDto'];
+export type DashboardActivity = components['schemas']['DashboardActivityDto'];
+export type DashboardHealth = components['schemas']['DashboardHealthResponseDto'];
+export type DashboardHealthService = components['schemas']['DashboardHealthServiceDto'];
+export type DashboardOrderListItem = components['schemas']['DashboardOrderListItemDto'];
+export type DashboardOrderDetail = components['schemas']['DashboardOrderDetailDto'];
+export type DashboardOrderDetailItem = components['schemas']['DashboardOrderDetailItemDto'];
+export type DashboardPaymentReference = components['schemas']['DashboardPaymentReferenceDto'];
+export type DashboardShipmentReference = components['schemas']['DashboardShipmentReferenceDto'];
+export type DashboardInventoryListItem = components['schemas']['DashboardInventoryListItemDto'];
+export type DashboardPaymentListItem = components['schemas']['DashboardPaymentListItemDto'];
+export type DashboardShipmentListItem = components['schemas']['DashboardShipmentListItemDto'];
+export type DashboardNotificationListItem = components['schemas']['DashboardNotificationListItemDto'];
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -84,109 +26,6 @@ export interface PaginatedResponse<T> {
     total: number;
     limit: number;
   };
-}
-
-export interface DashboardOrderListItem {
-  id: string;
-  customerId: string;
-  status: string;
-  totalAmount: number;
-  currency: string;
-  itemCount: number;
-  shippingAddress: string;
-  createdAt: string;
-}
-
-export interface DashboardOrderDetailItem {
-  id: string;
-  productId: string;
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  currency: string;
-  totalPrice: number;
-}
-
-export interface DashboardPaymentReference {
-  id: string;
-  orderId: string;
-  amount: number;
-  currency: string;
-  status: string;
-  method: string;
-  transactionId: string | null;
-  failureReason: string | null;
-  createdAt: string;
-}
-
-export interface DashboardShipmentReference {
-  id: string;
-  orderId: string;
-  status: string;
-  trackingNumber: string | null;
-  carrierName: string | null;
-  estimatedDelivery: string | null;
-  createdAt: string;
-}
-
-export interface DashboardOrderDetail {
-  id: string;
-  customerId: string;
-  status: string;
-  totalAmount: number;
-  currency: string;
-  shippingAddress: string;
-  createdAt: string;
-  updatedAt: string;
-  items: DashboardOrderDetailItem[];
-  payment: DashboardPaymentReference | null;
-  shipment: DashboardShipmentReference | null;
-}
-
-export interface DashboardInventoryListItem {
-  id: string;
-  sku: string;
-  productName: string;
-  totalQuantity: number;
-  reservedQuantity: number;
-  availableQuantity: number;
-  lowStockThreshold: number;
-  stockState: StockState;
-}
-
-export interface DashboardPaymentListItem {
-  id: string;
-  orderId: string;
-  amount: number;
-  currency: string;
-  status: string;
-  method: string;
-  transactionId: string | null;
-  failureReason: string | null;
-  createdAt: string;
-}
-
-export interface DashboardShipmentListItem {
-  id: string;
-  orderId: string;
-  status: string;
-  trackingNumber: string | null;
-  carrierName: string | null;
-  estimatedDelivery: string | null;
-  shippingAddress: string;
-  createdAt: string;
-}
-
-export interface DashboardNotificationListItem {
-  id: string;
-  recipientId: string;
-  channel: string;
-  type: string;
-  status: string;
-  subject: string;
-  body: string;
-  failureReason: string | null;
-  createdAt: string;
 }
 
 export const dashboardApi = {

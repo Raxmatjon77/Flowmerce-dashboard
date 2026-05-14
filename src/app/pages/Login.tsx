@@ -5,7 +5,7 @@ import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Label } from '../components/ui/label';
-import { login } from '../../lib/auth';
+import { loginAsAdmin } from '../../lib/auth';
 
 export function Login() {
   const navigate = useNavigate();
@@ -18,14 +18,18 @@ export function Login() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!userId.trim()) {
-      setError('User ID is required.');
+      setError('Admin user ID is required.');
+      return;
+    }
+    if (!password) {
+      setError('Password is required.');
       return;
     }
     setLoading(true);
     setError(null);
     try {
-      await login(userId.trim());
-      navigate('/');
+      await loginAsAdmin(userId.trim(), password);
+      void navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
@@ -54,7 +58,7 @@ export function Login() {
         </div>
 
         <h2 className="mb-6 text-center text-lg font-semibold text-white">
-          Sign in to your account
+          Sign in to admin panel
         </h2>
 
         {error && (
@@ -64,10 +68,10 @@ export function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="userId" className="text-sm font-medium text-gray-300">
-              User ID
+              Admin User ID
             </Label>
             <Input
               id="userId"
@@ -89,7 +93,7 @@ export function Login() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
+                placeholder="Enter admin password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-white/10 bg-white/5 pr-10 text-white placeholder:text-gray-500"

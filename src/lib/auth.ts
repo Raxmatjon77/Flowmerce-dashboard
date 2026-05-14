@@ -9,20 +9,30 @@ export function isAuthenticated(): boolean {
   return !!getStoredToken();
 }
 
-export async function login(userId: string): Promise<string> {
+export function getAdminUserId(): string | null {
+  const token = getStoredToken();
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1])) as { sub?: string };
+    return payload.sub ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function loginAsAdmin(userId: string, password: string): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, role: 'admin' }),
+    body: JSON.stringify({ userId, role: 'admin', password }),
   });
 
   if (!response.ok) {
-    throw new Error(`Login failed. Please check your credentials.`);
+    throw new Error('Invalid credentials. Please check your admin user ID and password.');
   }
 
   const data = (await response.json()) as { accessToken: string };
   localStorage.setItem(TOKEN_KEY, data.accessToken);
-  return data.accessToken;
 }
 
 export function logout(): void {
