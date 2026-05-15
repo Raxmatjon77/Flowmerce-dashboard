@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router';
+import { ErrorBoundary } from './ErrorBoundary';
 import { logout, getAdminUserId } from '../../lib/auth';
 import { 
   LayoutDashboard, 
@@ -215,7 +216,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Page Content */}
         <main className="p-4 sm:p-6 lg:p-8">
-          {children}
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </main>
       </div>
 
