@@ -1,5 +1,10 @@
 import { apiGet, apiPatch, apiPost } from './api';
 import type { components } from '../types/api.generated';
+import type { ConversationDto, MessageDto } from '../types/support';
+
+export type { ConversationDto, MessageDto };
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
 
 // --- Generated types from backend OpenAPI spec ---
 export type DashboardOverview = components['schemas']['DashboardOverviewResponseDto'];
@@ -76,6 +81,21 @@ export const operationsApi = {
     metadata?: Record<string, unknown>;
   }) => apiPost('/api/v1/notifications', payload),
 };
+
+export const supportApi = {
+  getConversations: (status?: string) =>
+    apiGet<ConversationDto[]>('/api/v1/support/conversations', status ? { status } : undefined),
+  getConversation: (id: string) =>
+    apiGet<ConversationDto>(`/api/v1/support/conversations/${id}`),
+  getMessages: (conversationId: string) =>
+    apiGet<MessageDto[]>(`/api/v1/support/conversations/${conversationId}/messages`),
+  sendMessage: (conversationId: string, content: string) =>
+    apiPost<MessageDto>(`/api/v1/support/conversations/${conversationId}/messages`, { content }),
+  closeConversation: (id: string) =>
+    apiPost<ConversationDto>(`/api/v1/support/conversations/${id}/close`),
+};
+
+export { API_BASE };
 
 export function formatCurrency(amount: number, currency = 'USD') {
   return new Intl.NumberFormat('en-US', {

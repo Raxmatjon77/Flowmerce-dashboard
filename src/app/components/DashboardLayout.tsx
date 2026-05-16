@@ -2,14 +2,15 @@ import { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { ErrorBoundary } from './ErrorBoundary';
 import { logout, getAdminUserId } from '../../lib/auth';
-import { 
-  LayoutDashboard, 
-  Users, 
-  ShoppingCart, 
-  Package, 
-  CreditCard, 
-  Truck, 
-  Bell, 
+import {
+  LayoutDashboard,
+  Users,
+  ShoppingCart,
+  Package,
+  CreditCard,
+  Truck,
+  Bell,
+  MessageCircle,
   Activity,
   Search,
   Menu,
@@ -42,6 +43,7 @@ const navigation = [
   { name: 'Payments', href: '/payments', icon: CreditCard },
   { name: 'Shipments', href: '/shipments', icon: Truck },
   { name: 'Notifications', href: '/notifications', icon: Bell },
+  { name: 'Support', href: '/support', icon: MessageCircle },
   { name: 'Infrastructure', href: '/health', icon: Activity },
 ];
 
