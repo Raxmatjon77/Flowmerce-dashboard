@@ -13,6 +13,7 @@ import { Notifications } from './pages/Notifications';
 import { Health } from './pages/Health';
 import { Support } from './pages/Support';
 import { SupportThread } from './pages/SupportThread';
+import { Coupons } from './pages/Coupons';
 import { NotFound } from './pages/NotFound';
 
 function Protected({ children }: { children: React.ReactNode }) {
@@ -77,6 +78,11 @@ export const router = createBrowserRouter([
   {
     path: '/support/:id',
     element: <Protected><SupportThread /></Protected>,
+    errorElement: <RouteErrorFallback />,
+  },
+  {
+    path: '/coupons',
+    element: <Protected><Coupons /></Protected>,
     errorElement: <RouteErrorFallback />,
   },
   {

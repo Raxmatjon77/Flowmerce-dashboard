@@ -12,6 +12,7 @@ import {
   Bell,
   MessageCircle,
   Activity,
+  Percent,
   Search,
   Menu,
   X,
@@ -44,6 +45,7 @@ const navigation = [
   { name: 'Shipments', href: '/shipments', icon: Truck },
   { name: 'Notifications', href: '/notifications', icon: Bell },
   { name: 'Support', href: '/support', icon: MessageCircle },
+  { name: 'Coupons', href: '/coupons', icon: Percent },
   { name: 'Infrastructure', href: '/health', icon: Activity },
 ];
 

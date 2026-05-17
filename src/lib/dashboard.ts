@@ -1,6 +1,7 @@
 import { apiGet, apiPatch, apiPost } from './api';
 import type { components } from '../types/api.generated';
 import type { ConversationDto, MessageDto } from '../types/support';
+import type { CouponDto, CreateCouponPayload } from '../types/coupon';
 
 export type { ConversationDto, MessageDto };
 
@@ -80,6 +81,19 @@ export const operationsApi = {
     body: string;
     metadata?: Record<string, unknown>;
   }) => apiPost('/api/v1/notifications', payload),
+};
+
+export type { CouponDto, CreateCouponPayload };
+
+export const couponApi = {
+  getCoupons: (params?: { isActive?: boolean; page?: number; limit?: number }) =>
+    apiGet<{ data: CouponDto[]; total: number }>('/api/v1/coupons', params as Record<string, string | number | boolean | undefined>),
+  getCoupon: (id: string) =>
+    apiGet<CouponDto>(`/api/v1/coupons/${id}`),
+  createCoupon: (payload: CreateCouponPayload) =>
+    apiPost<CouponDto>('/api/v1/coupons', payload),
+  deactivateCoupon: (id: string) =>
+    apiPost<{ message: string }>(`/api/v1/coupons/${id}/deactivate`),
 };
 
 export const supportApi = {
